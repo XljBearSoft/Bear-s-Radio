@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height, user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1,target-densitydpi=device-dpi ">  
+  <title>Bear's Radio</title>
+    <link rel="stylesheet" href="./css/player.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="./css/jquery.range.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/player.js"></script>
+    <script src="./js/StackBlur.js"></script>
+    <script src="./js/jquery.range.js"></script>
+    <script src="./js/lrc.js"></script>
+</head>
+<body>
+  <audio id="audio"></audio>
+  <div style="text-align:center;clear:both">
+    <img id="blurcache" />
+    <canvas id="blur"></canvas>
+    <div class="main">
+      <div class="header">
+        <div class="panel">
+        </div>
+      </div>
+      <div class="body">
+        <div class="chat">
+          <div class="fly-message"></div>
+          <div class="message"></div>
+          <div class="arrow hide">▲</div>
+          <div class="input">
+            <input maxlength="20" placeholder="在这里输入聊天" onblur="if(this.value==''){$(this).removeClass('active');}" onfocus="$(this).addClass('active');" onKeyUp="if(event.keyCode==13){SendMessage();}" id="message-input" />
+          </div>
+        </div>
+        <div id="lyricWrapper">
+          <div id="lyricContainer">
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="player-panel">
+          <div class="album rotate">
+            <img ondragstart="return false;">
+            <div class="cover"></div>
+          </div>
+          <div class="song-title"></div>
+          <div class="progress-bar">
+            <div class="bar">00:00</div>
+          </div>
+          <div class="volume-icon on"></div>
+          <div class="volume">
+            <input class="single-slider" id="volume" onchange="setVolume()" type="hidden" value="1.0"/>
+          </div>
+        </div>
+        <div class="foot-info"><span id="online">0</span>人在线.<br><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260562897'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1260562897%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script></div>
+      </div>
+    </div>
+    <div id="notify">
+      <div class="content"></div>
+      <div class="background"></div>
+    </div>
+  </div>
+</body>
+</html>
