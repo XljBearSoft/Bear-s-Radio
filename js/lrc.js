@@ -51,6 +51,9 @@ Selected.prototype = {
         while (!pattern.test(lines[0])) {
             lines = lines.slice(1);
         };
+        while (lines[lines.length-1]=="") {
+            lines.pop();
+        };
         lines[lines.length - 1].length === 0 && lines.pop();
         lines.forEach(function(v, i, a) {
             var time = v.match(pattern),

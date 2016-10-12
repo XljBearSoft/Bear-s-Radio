@@ -7,10 +7,14 @@ var InNotify = false;
 var InMute = false;
 var Fly_ID = 0;
 var Lrc = null;
+var NowPlayAid = "";
 $(function(){
   InitPlayer();
 });
 function ChangeMusic(music){
+  if(NowPlayAid!="")PlayListRemove(NowPlayAid);
+  NowPlayAid = music.id;
+  $("#music-"+NowPlayAid).addClass("now");
   music.blurPic = "./api/?type=album&" + Math.random();
   blurcache.src = music.blurPic;
   audio.src = music.src;
@@ -34,6 +38,17 @@ function InitPlayer(){
   Lrc = new Selected();
   volume_val = getCookie("Player_Volume");
   volume_mute = getCookie("Player_Mute");
+  openchat = getCookie("Player_Open_Chat");
+  openlist = getCookie("Player_Open_List");
+  if(openlist=="true"){
+    $(".PlayList>.arrow").html("&gt;");
+    $(".PlayList").animate({"width":310},0);
+  }
+  if(openchat=="true"){
+    $(".chat>.arrow").html("▼");
+    $(".chat>.arrow").removeClass("hide");
+    $(".chat>.message").animate({"opacity":1},0);
+  }
   if(volume_val!=''){
     audio.volume = volume_val;
     volume.value = volume_val;
@@ -66,16 +81,38 @@ function InitPlayer(){
       Mute(false);
     }
   });
-  $(document).on("click",".arrow",function(){
+  $(document).on("click",".chat>.arrow",function(){
     if($(this).html()=="▼"){
+      setCookie("Player_Open_Chat",false,30);
       $(this).html("▲");
       $(this).addClass("hide");
       $(".chat>.message").animate({"opacity":0},300);
     }else{
+      setCookie("Player_Open_Chat",true,30);
       $(this).html("▼");
       $(this).removeClass("hide");
       $(".chat>.message").animate({"opacity":1},300);
     }
+  });
+  $(document).on("click",".PlayList>.arrow",function(){
+    if($(this).html()=="&lt;"){
+      setCookie("Player_Open_List",true,30);
+      $(this).html("&gt;");
+      $(".PlayList").animate({"width":310},300);
+    }else{
+      setCookie("Player_Open_List",false,30);
+      $(this).html("&lt;");
+      $(".PlayList").animate({"width":20},300);
+    }
+  });
+  $(document).on("blur","#message-input",function(){
+    if(this.value=='')$(this).removeClass('active');
+  });
+  $(document).on("focus","#message-input",function(){
+    $(this).addClass('active');
+  });
+  $(document).on("keyup","#message-input",function(){
+    if(event.keyCode==13)SendMessage();
   });
 }
 function CreateFly(name,message){
@@ -101,6 +138,12 @@ function GetMessage(event){
       break;
     case "online":
       $("#online").html(data.online);
+      break;
+    case "list":
+      PlayList(data.list,true);
+      break;
+    case "newlist":
+      PlayList(data.list);
       break;
   }
 }
@@ -225,5 +268,32 @@ function getCookie(cname) {
     return "";
 }
 function clearCookie(name) {  
-    setCookie(name, "", -1);  
+    setCookie(name, "", -1);
+}
+function PlayList(musicList,init){
+  if(init==true){
+    $(".list>ul").html('');
+  }
+  for(var i=0;i<musicList.length;i++){
+    PlayListAdd(musicList[i]);
+  }
+}
+function PlayListAdd(music){
+  html = '<li id="music-'+ music.id +'">';
+  html += '<img src="http://music.xljbear.com/api/?type=album&aid='+ music.album_id +'">';
+  var time = music.totals;
+  var S = parseInt(time % 60);
+  var H = parseInt((time - S) / 60);
+  if(H < 10)H = "0" + H;
+  if(S < 10)S = "0" + S;
+  html += '<p class="song">'+ music.song + '-' + music.author +'<br><span class="duration">'+ H + ':' + S +'</span></p></li>';
+  $(".list>ul").append(html);
+  $("#music-"+music.id+">img").load(function(){
+    $(this).animate({"opacity":1},600);
+  });
+}
+function PlayListRemove(musicid){
+  $("#music-"+musicid).fadeOut(800,function(){
+    $(this).remove();
+  });
 }

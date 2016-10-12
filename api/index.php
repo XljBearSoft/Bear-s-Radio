@@ -21,8 +21,8 @@ switch($type){
   break;
   case "album":
     $g_aid = isset($_GET['aid'])?$_GET['aid']:'';
-    if($global->album_id == '' && $g_aid =='')exit();
-    $aid = $g_aid==''?$global->album_id:$g_aid;
+    if($global->music['album_id'] == '' && $g_aid =='')exit();
+    $aid = $g_aid==''?$global->music['album_id']:$g_aid;
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, "http://y.gtimg.cn/music/photo_new/T002R300x300M000{$aid}.jpg"); 
     curl_setopt($curl, CURLOPT_REFERER, '');

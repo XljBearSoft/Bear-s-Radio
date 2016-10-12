@@ -4,26 +4,16 @@ require_once '../Server/GlobalData/src/Client.php';
 require_once '../api/TencentMusicAPI.php';
  class Wechat{
     private $Web = "http://music.xljbear.com/WeChat/";
-    //签名
     private $token = '';
-    //消息类型
     private $msgtype;
-    //消息内容
     private $msgobj;
-    //事件类型
     private $eventtype;
-    //事件key值
     private $eventkey;
-    #{服务号才可得到
-    //AppId
-    private $appid = "xxx";
-    //AppSecret
-    private $secret = "xxx";
-    #}
+    private $appid = "wx381ebeff7c91c2d5";
+    private $secret = "6c32509a866445a289cd31f075e96f94";
     private $global = null;
     private $_isvalid = false;
     private $Tapi = null;
-
     public function __construct($token,$isvalid = false){
         $this->token = $token;
         $this->_isvalid = $isvalid;
@@ -66,9 +56,7 @@ require_once '../api/TencentMusicAPI.php';
                         case '正在播放':
                             $data = "当前正在播放的是:\n";
                             $data .= "艺术家：{$this->global->music['author']}\n\n曲名：{$this->global->music['song']}\n\n";
-                            $data .= "有{$this->global->people}人正在欣赏！\n";
-                            $count = $this->global->count + 1;
-                            $data .= "循环播放第{$count}遍中...";
+                            $data .= "有{$this->global->online}人正在欣赏！";
                             break;
                         default:
                             $music = json_decode($this->Tapi->search($content),true);
@@ -112,7 +100,6 @@ require_once '../api/TencentMusicAPI.php';
                 $this->eventOpt();
                 break;
             default:
-                # code...
                 break;
         }
     }
@@ -139,9 +126,6 @@ require_once '../api/TencentMusicAPI.php';
         $resultstr = sprintf($newsxml,$itemxml);
         echo $resultstr;
     }
-    /**
-     *  事件处理
-     */
     private function eventOpt(){
         $this->eventtype = strtolower($this->msgobj->Event);
         switch ($this->eventtype) {

@@ -28,7 +28,13 @@
           <div class="message"></div>
           <div class="arrow hide">▲</div>
           <div class="input">
-            <input maxlength="20" placeholder="在这里输入聊天" onblur="if(this.value==''){$(this).removeClass('active');}" onfocus="$(this).addClass('active');" onKeyUp="if(event.keyCode==13){SendMessage();}" id="message-input" />
+            <input maxlength="20" placeholder="在这里输入聊天" id="message-input" />
+          </div>
+        </div>
+        <div class="PlayList">
+          <div class="arrow">&lt;</div>
+          <div class="list">
+            <ul></ul>
           </div>
         </div>
         <div id="lyricWrapper">

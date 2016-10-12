@@ -10,33 +10,42 @@ if(isset($_POST['mid'])){
     $Aid = $_POST['aid'];
     if($Mid!=''&&$Aid!=''){
         $Tapi = new TencentMusicAPI();
-        if($global->music['id'] == $Mid){
+        if($global->music['id'] === $Mid||CheckInList($Mid,$global->music_list)){
             $played = true;
         }else{
-            $music = json_decode($Tapi->detail($Mid),true);
-            $musicUrl = json_decode($Tapi->url($Mid),true);
-            if(isset($music['data'])){
-                $musicD['id'] = $Mid;
-                $musicD['src'] = $musicUrl['320mp3'];
-                $musicD['song'] = $music['data'][0]['title'];
-                $musicD['author'] = $music['data'][0]['singer'][0]['name'];
-                $global->music = $musicD;
-                $global->totals = $music['data'][0]['interval'];
-                $global->now = 0;
-                $global->count = 0;
-                $global->album_id = $Aid;
-                $played = true;
-            }else{
-                $played = false;
+            if(sizeof($global->music_list)<10){
+                $music = json_decode($Tapi->detail($Mid),true);
+                $musicUrl = json_decode($Tapi->url($Mid),true);
+                if(isset($music['data'])){
+                    $musicD['id'] = $Mid;
+                    $musicD['src'] = $musicUrl['320mp3'];
+                    $musicD['song'] = $music['data'][0]['title'];
+                    $musicD['author'] = $music['data'][0]['singer'][0]['name'];
+                    $musicD['totals'] = $music['data'][0]['interval'];
+                    $musicD['album_id'] = $Aid;
+                    $tempArr = $global->music_list;
+                    $tempArr[] = $musicD;
+                    $global->music_list = $tempArr;
+                    $tempArr = $global->list_new;
+                    $tempArr[] = $musicD;
+                    $global->list_new = $tempArr;
+                    $played = true;
+                }
             }
         }
     }
 }else{
     $Data = json_decode(base64_decode(urldecode($_GET['music'])),true);
     if(!$Data)exit('Error');
-    if($global->music['id'] == $Data[0]){
+    if($global->music['id'] === $Data[0]||CheckInList($Data[0],$global->music_list)){
         $played = true;
     }
+}
+function CheckInList($id,$list){
+    foreach ($list as $value) {
+        if($value['id'] === $id)return true;
+    }
+    return false;
 }
 ?>
 <!DOCTYPE html>
@@ -79,14 +88,25 @@ if(isset($_POST['mid'])){
 <body>
     <p>当前播放曲目: <?=$global->music['song']?></p>
     <p>艺术家: <?=$global->music['author']?></p>
-    <p>当前有<?=$global->people?>位用户在线</p>
+    <p>播放列表(<?=sizeof($global->music_list)?>):<br><br>
+    <?php 
+        $i = 1;
+        foreach ($global->music_list as $value){
+            echo "$i.{$value['song']}<br>";
+            $i++;
+        }
+    ?>
+    <p>当前有<?=$global->online?>位用户在线</p>
+    </p>
     <form id="form" method="post">
         <?php if($played){?>
-            <div class="button disable">当前正在播放 《<?=$global->music['song']?>》</div>
+            <div class="button disable">已加入播放列表</div>
+        <?php }else if(sizeof($global->music_list)>=10){?>
+            <div class="button disable">播放列表已满请稍候再来</div>
         <?php }else{?>
             <input type="hidden" name="mid" value="<?=$Data[0]?>" />
             <input type="hidden" name="aid" value="<?=$Data[1]?>" />
-            <div class="button" onclick="form.submit();">立刻点播 《<?=$Data[2]?>》</div>
+            <div class="button" onclick="form.submit();">点播 《<?=$Data[2]?>》</div>
         <?php }?>
     </form>
 </body>
