@@ -98,6 +98,14 @@ function CheckInList($id,$list){
     ?>
     <p>当前有<?=$global->online?>位用户在线</p>
     </p>
+    <script type="text/javascript">
+        var Insubmit = false;
+        function addSong(){
+            if(Insubmit)return;
+            Insubmit = true;
+            form.submit();
+        }
+    </script>
     <form id="form" method="post">
         <?php if($played){?>
             <div class="button disable">已加入播放列表</div>
@@ -106,7 +114,7 @@ function CheckInList($id,$list){
         <?php }else{?>
             <input type="hidden" name="mid" value="<?=$Data[0]?>" />
             <input type="hidden" name="aid" value="<?=$Data[1]?>" />
-            <div class="button" onclick="form.submit();">点播 《<?=$Data[2]?>》</div>
+            <div class="button" onclick="addSong();">点播 《<?=$Data[2]?>》</div>
         <?php }?>
     </form>
 </body>
