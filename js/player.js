@@ -111,7 +111,7 @@ function InitPlayer(){
   $(document).on("focus","#message-input",function(){
     $(this).addClass('active');
   });
-  $(document).on("keyup","#message-input",function(){
+  $(document).on("keyup","#message-input",function(event){
     if(event.keyCode==13)SendMessage();
   });
 }
