@@ -64,8 +64,8 @@ require_once '../api/TencentMusicAPI.php';
                               $musicList = $music['data']['song']['list'];
                               if(sizeof($musicList)>10){
                                 for($i=0;$i<9;$i++){
-                                  $d['title']= $musicList[$i]['songname'] . ' - ' . $musicList[$i]['singer'][0]['name'];
-                                  $d['summary'] = $musicList[$i]['singer'][0]['name'];
+                                  $d['title']= html_entity_decode($musicList[$i]['songname'],ENT_QUOTES) . ' - ' . html_entity_decode($musicList[$i]['singer'][0]['name'],ENT_QUOTES);
+                                  $d['summary'] = html_entity_decode($musicList[$i]['singer'][0]['name'],ENT_QUOTES);
                                   $d['picurl'] = "http://y.gtimg.cn/music/photo_new/T002R300x300M000{$musicList[$i]['albummid']}.jpg";
                                   $d['url'] = $this->Web . 'music.php?music=' . urlencode(base64_encode(json_encode(array($musicList[$i]['songmid'],$musicList[$i]['albummid'],$musicList[$i]['songname']))));
                                   $data2[] = $d;
@@ -76,8 +76,8 @@ require_once '../api/TencentMusicAPI.php';
                                 $data2[] = $d;
                               }else{
                                 foreach ($musicList as $value) {
-                                  $d['title']= $value['songname'] . ' - ' . $value['singer'][0]['name'];
-                                  $d['summary'] = $value['singer'][0]['name'];
+                                  $d['title']= html_entity_decode($value['songname'],ENT_QUOTES) . ' - ' . html_entity_decode($value['singer'][0]['name'],ENT_QUOTES);
+                                  $d['summary'] = html_entity_decode($value['singer'][0]['name'],ENT_QUOTES);
                                   $d['picurl'] = "http://y.gtimg.cn/music/photo_new/T002R300x300M000{$value['albummid']}.jpg";
                                   $d['url'] = $this->Web . 'music.php?music=' . urlencode(base64_encode(json_encode(array($value['songmid'],$value['albummid'],$value['songname']))));
                                   $data2[] = $d;

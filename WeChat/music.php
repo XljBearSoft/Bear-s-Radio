@@ -19,8 +19,8 @@ if(isset($_POST['mid'])){
                 if(isset($music['data'])){
                     $musicD['id'] = $Mid;
                     $musicD['src'] = $musicUrl['320mp3'];
-                    $musicD['song'] = $music['data'][0]['title'];
-                    $musicD['author'] = $music['data'][0]['singer'][0]['name'];
+                    $musicD['song'] = html_entity_decode($music['data'][0]['title'],ENT_QUOTES);
+                    $musicD['author'] = html_entity_decode($music['data'][0]['singer'][0]['name'],ENT_QUOTES);
                     $musicD['totals'] = $music['data'][0]['interval'];
                     $musicD['album_id'] = $Aid;
                     $tempArr = $global->music_list;

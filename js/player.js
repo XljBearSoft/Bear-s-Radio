@@ -251,13 +251,13 @@ function updateProgress(){
   if(S < 10)S = "0" + S;
   $('.progress-bar>.bar').html(H + ":" + S);
 }
-function setCookie(cname, cvalue, exdays) {
+function setCookie(cname, cvalue, exdays){
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
     document.cookie = cname + "=" + cvalue + "; " + expires;
 }
-function getCookie(cname) {
+function getCookie(cname){
     var name = cname + "=";
     var ca = document.cookie.split(';');
     for(var i=0; i<ca.length; i++) {
@@ -267,7 +267,7 @@ function getCookie(cname) {
     }
     return "";
 }
-function clearCookie(name) {  
+function clearCookie(name){  
     setCookie(name, "", -1);
 }
 function PlayList(musicList,init){
@@ -280,7 +280,7 @@ function PlayList(musicList,init){
 }
 function PlayListAdd(music){
   html = '<li id="music-'+ music.id +'">';
-  html += '<img src="http://music.xljbear.com/api/?type=album&aid='+ music.album_id +'">';
+  html += '<img src="./api/?type=album&aid='+ music.album_id +'">';
   var time = music.totals;
   var S = parseInt(time % 60);
   var H = parseInt((time - S) / 60);

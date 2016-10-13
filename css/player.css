@@ -414,3 +414,11 @@ html{ margin:0; height:100%; }
   font-size:10px;
   color:white;
 }
+.qr{
+  position: absolute;
+  left:0px;
+  top:65px;
+  height:129px;
+  width:129px;
+  background:url(../images/qrcode.jpg);
+}
