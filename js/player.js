@@ -1,6 +1,7 @@
 var ServerAddress = "ws.music.xljbear.com:9532";
 var blurEl = null;
 var audio = null;
+var sound = null;
 var ws = null;
 var NotifyList = new Array();
 var InNotify = false;
@@ -8,6 +9,27 @@ var InMute = false;
 var Fly_ID = 0;
 var Lrc = null;
 var NowPlayAid = "";
+var MessageReminding = false;
+var MessageRemind={
+  _step: 0,
+  _title: document.title,
+  _timer: null,
+  show:function(){
+    var temps = MessageRemind._title.replace("(*￣ω￣)★ ", "").replace("★(￣ω￣*) ", "");
+    MessageRemind._timer = setTimeout(function() {
+      MessageRemind.show();
+      MessageRemind._step++;
+      if (MessageRemind._step == 3){MessageRemind._step = 1 };
+      if (MessageRemind._step == 1){document.title = "(*￣ω￣)★ " + temps };
+      if (MessageRemind._step == 2){document.title = "★(￣ω￣*) " + temps };
+    }, 800);
+    return [MessageRemind._timer, MessageRemind._title];
+  },
+  clear: function(){
+    clearTimeout(MessageRemind._timer );
+    document.title = MessageRemind._title;
+  }
+};
 $(function(){
   InitPlayer();
 });
@@ -32,9 +54,15 @@ function ChangeMusic(music){
 }
 function InitPlayer(){
   audio = document.getElementById('audio');
+  sound = document.getElementById('sound');
   audio.controls = false;
   audio.autoplay = true;
   audio.loop = true;
+  sound.controls = false;
+  sound.autoplay = false;
+  sound.loop = false;
+  sound.src = './Sound/ding.mp3';
+  sound.volume = 1;
   Lrc = new Selected();
   volume_val = getCookie("Player_Volume");
   volume_mute = getCookie("Player_Mute");
@@ -114,6 +142,12 @@ function InitPlayer(){
   $(document).on("keyup","#message-input",function(event){
     if(event.keyCode==13)SendMessage();
   });
+  document.body.onmousemove = function(){
+    if(MessageReminding){
+      MessageReminding = false;
+      MessageRemind.clear();
+    }
+  }
 }
 function CreateFly(name,message){
   var fid = Fly_ID++;
@@ -134,6 +168,14 @@ function GetMessage(event){
       ChangeMusic(data);
       break;
     case "msg":
+      if(!MessageReminding){
+        MessageReminding = true;
+        MessageRemind._title = document.title;
+        MessageRemind.show();
+      }
+      sound.pause(); 
+      sound.currentTime = 0; 
+      sound.play();
       AddMessage("网友",data.content);
       break;
     case "online":
