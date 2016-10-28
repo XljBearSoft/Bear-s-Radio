@@ -43,6 +43,10 @@ function ChangeMusic(music){
   ChangeSongTitle(music.author + " - " + music.song);
   $("#song").html(music.song);
   $("#author").html(music.author);
+  if(MessageReminding){
+    MessageReminding = false;
+    MessageRemind.clear();
+  }
   document.title = music.song + " - Bear's Radio";
   audio.currentTime = music.currentTime;
   var MusicNotify = new Object();
@@ -62,7 +66,7 @@ function InitPlayer(){
   sound.autoplay = false;
   sound.loop = false;
   sound.src = './Sound/ding.mp3';
-  sound.volume = 1;
+  sound.volume = 0.3;
   Lrc = new Selected();
   volume_val = getCookie("Player_Volume");
   volume_mute = getCookie("Player_Mute");
