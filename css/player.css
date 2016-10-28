@@ -377,11 +377,12 @@ html{ margin:0; height:100%; }
   overflow-x:hidden;
 }
 .PlayList li{
-  width: 310px;
+  width: 300px;
   height:50px;
   list-style-type:none;
   background-color:rgba(0,0,0,0.05);
   margin-bottom:2px;
+  overflow:hidden;
 }
 .PlayList li.now{
   transition: all 0.8s;
@@ -389,9 +390,7 @@ html{ margin:0; height:100%; }
 }
 .PlayList li:hover{
   transition: all 0.4s;
-  width: 310px;
-  height:50px;
-  list-style-type:none;
+  margin-left:5px;
   background-color:rgba(0,0,0,0.4);
 }
 .PlayList li>img{
@@ -401,7 +400,7 @@ html{ margin:0; height:100%; }
   opacity:0;
 }
 .PlayList li>p{
-  width:350px;
+  width:1000px;
   text-align:left;
   color:white;
   text-shadow:0px 0px 3px black;

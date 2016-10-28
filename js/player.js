@@ -328,7 +328,11 @@ function PlayListAdd(music){
   var H = parseInt((time - S) / 60);
   if(H < 10)H = "0" + H;
   if(S < 10)S = "0" + S;
-  html += '<p class="song">'+ music.song + '-' + music.author +'<br><span class="duration">'+ H + ':' + S +'</span></p></li>';
+  if((music.song + '-' + music.author).length>20){
+      html += '<p class="song"><marquee behavior="scroll" width="280px" height="18px" scrollamount="3">'+ music.song + '-' + music.author +'</marquee><br><span class="duration">'+ H + ':' + S +'</span></p></li>';
+  }else{
+      html += '<p class="song">'+ music.song + '-' + music.author +'<br><span class="duration">'+ H + ':' + S +'</span></p></li>';
+  }
   $(".list>ul").append(html);
   $("#music-"+music.id+">img").load(function(){
     $(this).animate({"opacity":1},600);
