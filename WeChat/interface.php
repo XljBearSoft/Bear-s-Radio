@@ -1,4 +1,4 @@
 <?php
 require './wechat.php';
-$wx = new Wechat("XljBearSoft");
+$wx = new Wechat("your token");
 $wx->index();

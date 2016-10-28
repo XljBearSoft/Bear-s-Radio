@@ -14,13 +14,14 @@ Selected.prototype = {
         that.getLyric("./api/?type=lrc");
         this.audio.addEventListener("timeupdate", function(e) {
             if (!that.lyric) return;
-            for (var i = 0, l = that.lyric.length; i < l; i++) {
+            for (var i = that.lyric.length - 1 ; i >= 0; i--) {
                 if (this.currentTime > that.lyric[i][0] - 0.50) {
                     var line = document.getElementById('line-' + i),
                         prevLine = document.getElementById('line-' + (i > 0 ? i - 1 : i));
                     $(prevLine).removeClass('current-line');
                     line.className = 'current-line';
                     that.lyricContainer.style.top = document.body.clientHeight/3.2 - line.offsetTop + 'px';
+                    break;
                 };
             };
         });
@@ -50,6 +51,7 @@ Selected.prototype = {
         var offset = this.getOffset(text);
         while (!pattern.test(lines[0])) {
             lines = lines.slice(1);
+            if(lines.length==0)return;
         };
         while (lines[lines.length-1]=="") {
             lines.pop();
