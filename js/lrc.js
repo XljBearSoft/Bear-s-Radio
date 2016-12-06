@@ -8,9 +8,6 @@ Selected.prototype = {
         var that = this;
         this.lyricContainer.style.top = '130px';
         this.lyric = null;
-        this.audio.addEventListener('canplay', function() {
-            that.getLyric("./api/?type=lrc");
-        });
         that.getLyric("./api/?type=lrc");
         this.audio.addEventListener("timeupdate", function(e) {
             if (!that.lyric) return;
